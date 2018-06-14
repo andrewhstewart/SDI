@@ -40,7 +40,9 @@ pipeline-- Simply combines the align, combine, and subtract functions into one c
 sextractor-- Runs SExtractor on each residual image and creates a catalog of sources for each in the target's "sources" directory. SExtractor parameters can be configured in the package's .param and .config files. See SExtractor's documentation on astromatic.net
 
 Run these scripts in the terminal with
-    python sdi_pipeline.scriptname.py
+    python -m sdi_pipeline.scriptname
+    
+    Example: To align images -> python -m sdi_pipeline.align
 
 The simulation of ETI laser transmissions is done with Skymaker. The code for this is included but not yet neatly packaged into a singular function. It is still possible for users to use this code, but it will require manipulating scripts that are largely uncommented and have little documentation. I am working on an updated package that will include easy source-simulation functionality. Until then let me know if you have any questions about this part of the pipeline.
 
