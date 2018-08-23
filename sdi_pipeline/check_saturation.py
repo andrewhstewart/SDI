@@ -26,7 +26,7 @@ def check_saturate(location):
     length = len(location) + 6
     for i in images:
         hdu = fits.open(i)
-        lin = hdu[0].header['MAXLIN']
+        lin = hdu[0].header['SATURATE']
         data = hdu[0].data
 #        rows = np.size(data, axis=0)
 #        cols = np.size(data, axis=1)

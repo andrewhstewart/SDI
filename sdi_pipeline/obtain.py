@@ -87,7 +87,7 @@ def movetar(tar):
     print("moved %d images to %s\n" % (sum(x), data))
     print("moved %d raw images to %s\n" % (sum(y), raw_data))
     if check == False:
-        print("created %s directory in %s/sdi/targets\n" (tar, loc))
+        print("created %s directory in %s/sdi/targets\n" % (tar, loc))
         
 #%%
 #group images of same RA and DEC together in their own directories
