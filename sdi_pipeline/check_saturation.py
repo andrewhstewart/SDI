@@ -37,7 +37,7 @@ def check_saturate(location):
         sat = ((data>lin)).sum()
 #        ind = np.unravel_index(np.argmax(data, axis=None), data.shape)
 #        excess = data[ind[0], ind[1]] - lin
-        if sat > 3:
+        if sat > 5:
 #            print "\n%s saturated | # saturated pixels = %d | max pixel location = (%d, %d)\nmax value over linearity limit = %d" % (i[length:], x, ind[0], ind[1], excess)
             y += 1
             im.append(i)
