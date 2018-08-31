@@ -15,7 +15,7 @@ from initialize import loc
 #%%
 #checks all fits images in a directory for saturation
 def check_saturate(location):
-    print("checking images for saturation...")
+    print("\nchecking images for saturation...")
     Max = []
     im = []
     m = []
@@ -54,7 +54,7 @@ def check_saturate(location):
         diff = lin - np.max(Max)
         print("\nno saturated images in %s" % (location))
         print("\nclosest value to saturation = %d" % (np.max(Max)))
-        print("\ndifference between this value and saturation level = %d" % (diff))
+        print("\ndifference between this value and saturation level = %d\n" % (diff))
         return y
     
 #%%

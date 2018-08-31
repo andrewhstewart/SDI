@@ -31,7 +31,7 @@ if __name__ == '__main__':
                     align_astroalign.align2(location)
                 else:
                     print("Error: unknown method")
-            else:
+            elif move == 'n':
                 ref_image(location)
                 alignment = input("Enter alignment method (enter iraf or astroalign): ")
                 if alignment == "iraf":
@@ -41,3 +41,9 @@ if __name__ == '__main__':
                     align_astroalign.align2(location)
                 else:
                     print("Error: unknown method")
+            else:
+                print("Unknown input: must be y or n")
+        elif check =='n':
+            pass
+        else:
+            print("Unknown input: must be y or n")

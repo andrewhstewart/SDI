@@ -30,6 +30,6 @@ def align3(location):
         hdu.writeto(aligned_name)
         hdu1.close()
         percent = float(x)/float(len(images)) * 100
-        print "%.3f%% aligned..." % (percent)
+        print("%.3f%% aligned..." % (percent))
         x += 1
     hdu2.close()

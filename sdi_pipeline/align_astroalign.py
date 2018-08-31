@@ -16,6 +16,7 @@ import astroalign
 #%%
 #align images to reference image using astroalign package
 def align2(location):
+    worked = True
     x = 1
     images = glob.glob(location + "/*_N_.fits")
     ref = glob.glob(location + "/*_ref_A_.fits")
@@ -28,14 +29,33 @@ def align2(location):
         data1 = np.array(data1, dtype="float64")
 #        transf, (source_list, target_list) = astroalign.find_transform(data1, data2)
 #        aligned = astroalign.apply_transform(transf, data1, data2)
-        aligned = astroalign.register(data1, data2)
-        aligned_name = i[:-8] + "_A_.fits"
-        hdu = fits.PrimaryHDU(aligned, header=hdu1[0].header)
-        hdu.writeto(aligned_name)
-        hdu1.close()
-        os.system("mv %s %s/sdi/archive/data" % (i, loc))
-        percent = float(x)/float(len(images)) * 100
-        print("%.1f%% aligned..." % (percent))
-        x += 1
+        try:
+            aligned = astroalign.register(data1, data2)
+        except:
+            view_im = input("\nAlignment failed: View trouble image in ds9? (y/n): ")
+            if view_im == 'y':
+                os.system("ds9 -scale zscale %s" % (i))
+            elif view_im == 'n':
+                pass
+            else:
+                print("Unknown input: must be y or n")
+            delete = input("\nDelete trouble image from data set? (Do so if image has obvious issues or artifacts) (y/n): ")
+            if delete == 'y':
+                os.system("mkdir -p %s/sdi/archive/'Failed Alignments' ; mv %s %s/sdi/archive/'Failed Alignments'" % (loc, i, loc))
+                print("\nMoved trouble image to 'Failed Alignments' in 'archive' directory")
+            elif delete == 'n':
+                pass
+            else:
+                print("\nUnknown input: must be y or n")
+            worked = False
+        if worked == True:
+            aligned_name = i[:-8] + "_A_.fits"
+            hdu = fits.PrimaryHDU(aligned, header=hdu1[0].header)
+            hdu.writeto(aligned_name)
+            hdu1.close()
+            os.system("mv %s %s/sdi/archive/data" % (i, loc))
+            percent = float(x)/float(len(images)) * 100
+            print("%.1f%% aligned..." % (percent))
+            x += 1
     hdu2.close()
     
