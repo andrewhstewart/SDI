@@ -12,6 +12,7 @@ from astropy.io import fits
 import glob
 from initialize import loc
 from initialize import create
+import gzip
 
 #%%
 #move downloaded LCO data from download_loc to temp folder
@@ -41,12 +42,24 @@ def process():
     temp = "%s/sdi/temp" % (loc)
     zipfiles = glob.glob("%s/*.zip" % (temp))
     for i in zipfiles:
-        zip_ref = zipfile.ZipFile(i, 'r')
-        zip_ref.extractall(temp)
-        zip_ref.close()
-        os.remove(i)
-        x.append(num)
-        d =+ 1
+        try:
+            zip_ref = zipfile.ZipFile(i, 'r')
+            zip_ref.extractall(temp)
+            zip_ref.close()
+            os.remove(i)
+            x.append(num)
+            d =+ 1
+        except:
+            print("Unable to unzip using zipfile, trying with Gzipfile...")
+            try:
+                zip_ref = gzip.GzipFile(i, 'r')
+                zip_ref.extractall(temp)
+                zip_ref.close()
+                os.remove(i)
+                x.append(num)
+                d =+ 1 
+            except:
+                print("Cannot unzip %s" % (i))
     for d in os.listdir(temp):
         if os.path.isdir(temp+"/"+d)==True:
             for j in os.listdir(temp+"/"+d):

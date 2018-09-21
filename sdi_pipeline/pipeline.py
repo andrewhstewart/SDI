@@ -9,6 +9,7 @@ import combine_swarp
 import combine_numpy
 import sex
 import check_saturation
+from master_residual import MR
 
 if __name__ == '__main__':
     location = input("Enter path to data directory: ")
@@ -59,18 +60,22 @@ if __name__ == '__main__':
     else:
         print("Error: unknown method entered")
     path = location[:-5]
-    method = input("Choose subtraction method: numpy (default), hotpants, image-by-image, or iraf: ")
+    method = input("\nChoose subtraction method: numpy (default), hotpants, image-by-image, or iraf: ")
     if method == 'numpy' or method == '':
         subtract_numpy.subtract2(path)
+        MR(path)
     elif method == 'hotpants':
         subtract_hotpants.hotpants(path)
+        MR(path)
     elif method == 'image-by-image':
         subtract_ibi.subtract3(path)
+        MR(path)
     elif method == 'iraf':
         import subtract_iraf
         subtract_iraf.subtract(path)
+        MR(path)
     else:
-        print("Error: Unknown method")
+        print("\nError: Unknown method")
     ask = input("Run sextractor on residual images? (y/n): ")
     if ask == 'y':
         sex.sex(path)

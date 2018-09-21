@@ -16,7 +16,6 @@ import astroalign
 #%%
 #align images to reference image using astroalign package
 def align2(location):
-    worked = True
     x = 1
     images = glob.glob(location + "/*_N_.fits")
     ref = glob.glob(location + "/*_ref_A_.fits")
@@ -24,6 +23,7 @@ def align2(location):
     data2 = hdu2[0].data
     data2 = np.array(data2, dtype="float64")  
     for i in images:
+        worked = True
         hdu1 = fits.open(i)
         data1 = hdu1[0].data
         data1 = np.array(data1, dtype="float64")
@@ -48,6 +48,7 @@ def align2(location):
             else:
                 print("\nUnknown input: must be y or n")
             worked = False
+            x += 1
         if worked == True:
             aligned_name = i[:-8] + "_A_.fits"
             hdu = fits.PrimaryHDU(aligned, header=hdu1[0].header)

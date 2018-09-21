@@ -12,7 +12,7 @@ from astropy.io import fits
 import os
 
 #%%
-#rename first image in directory to be the reference image
+#rename lowest noise image to be the reference image
 def ref_image(location):
     noise = []
     ref = glob.glob(location + "/*_ref_A_.fits")
