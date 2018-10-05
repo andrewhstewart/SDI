@@ -17,10 +17,11 @@ from astropy.io import fits
 def combine_median(location):
     location = location[:-5]
     data = []
-    images = glob.glob(location + "/data" + "/*_A_.fits")
+    images = glob.glob(location + "/data" + "/*_a_.fits")
     log_loc = location + "/templates/log.txt"
     log_list = open(log_loc, "a+")
     time = strftime("%Y-%m-%d %H:%M:%S", gmtime())
+    print('\n-> Combining images...')
     for i in images:
         hdu1 = fits.open(i)
         data1 = hdu1[0].data
@@ -34,5 +35,5 @@ def combine_median(location):
     hdu.writeto(combined_name)
     log_list.write("template updated at %s UTC | method = median (numpy) | images = %d\n" % (str(time), len(images)))
     log_list.close()
-    print("image combination successful!\ntemplate log updated\n")
+    print("-> image combination successful!\ntemplate log updated\n")
     return comb

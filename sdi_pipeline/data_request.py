@@ -72,7 +72,7 @@ def download_frames(sdate, edate, headers, prop, datafolder):
 
     frames = response['results']
     if len(frames) != 0:
-        print('\t > Frames identified for the '+sdate+'/'+edate+' period. Checking frames...')
+        print('\t-> Frames identified for the '+sdate+'/'+edate+' period. Checking frames...')
         while True:
             for frame in frames:
                 nidentified += 1
@@ -93,8 +93,8 @@ def download_frames(sdate, edate, headers, prop, datafolder):
                    '_cat.fits' != frame['filename'][-9:]:
 #                    if args.spectra and not frame['filename'].endswith('.tar.gz'):
 #                        continue
-                    print('\t   + File '+frame['filename']+' not found in '+outpath)
-                    print('\t     Downloading ...')
+                    print('->   + File '+frame['filename']+' not found in '+outpath)
+                    print('->     Downloading ...')
                     with open(os.path.join(outpath, frame['filename']), 'wb') as f:
                         f.write(requests.get(frame['url']).content)
                     ndownloaded += 1
@@ -136,14 +136,14 @@ def get_headers_from_token(username, password):
 #    propID = args.proposalID
 #    dfolder = args.datafolder
 def request():
-    print('\n\t ----------------------------------------------')
-    print('\t                lcogtDD v.1.2.\n')
-    print('\t Author: Nestor Espinoza (nespino@astro.puc.cl)')
-    print('\t                         (github@nespinoza)')
-    print('\t w/ contributions from: BJ Fulton (bfulton@caltech.edu)')
-    print('\t                                  (github@bjfultn)')
-    print('\t Modified for UCSB SDI OASIS Pipeline by: Andrew Stewart (andrew.henry.stewart@emory.edu)')
-    print('\t ----------------------------------------------\n')
+#    print('\n\t ----------------------------------------------')
+#    print('\t                lcogtDD v.1.2.\n')
+#    print('\t Author: Nestor Espinoza (nespino@astro.puc.cl)')
+#    print('\t                         (github@nespinoza)')
+#    print('\t w/ contributions from: BJ Fulton (bfulton@caltech.edu)')
+#    print('\t                                  (github@bjfultn)')
+#    print('\t Modified for UCSB SDI OASIS Pipeline by: Andrew Stewart (andrew.henry.stewart@emory.edu)')
+#    print('\t ----------------------------------------------\n')
     # Check that user input is ok:
 #    if starting_date is None:
 #        print('\t lgogtDD input error: Please, insert a starting date from which')
@@ -168,21 +168,21 @@ def request():
 #        print('\t > Checking data from {} to {}...\n'.format(starting_date, ending_date))
     # Get data from user file:
 #    f = open('userdata.dat', 'r')
-    username = input("\t > Enter LCO username: ")
-    password = input("\t > Enter LCO password: ")
+    username = input("-> Enter LCO username: ")
+    password = input("-> Enter LCO password: ")
     props = proposals.get_proposals(username, password)
     if props != []:
-        print("\n\t > Your proposals:\n")
+        print("\n-> Your proposals:\n")
         for i in props:
-            print("\t > " + i + "\n")
+            print("\t-> " + i + "\n")
     else:
-        print("\t > No proposals attached to your account\n")
-    proposal = input("\t > Enter proposal you wish to download data from: ")
-    datafolder = input("\t > Enter destination of downloaded files (defaut=%s): " % (loc+"/sdi/temp"))
+        print("-> No proposals attached to your account\n")
+    proposal = input("-> Enter proposal you wish to download data from: ")
+    datafolder = input("-> Enter destination of downloaded files (defaut=%s): " % (loc+"/sdi/temp"))
     if datafolder == "":
         datafolder = loc + "/sdi/temp"
-    starting_date = input("\t > Enter starting date (YYYY-MM-DD): ")
-    ending_date = input("\t > Enter ending date (leaving blank will download all data since start date): ")
+    starting_date = input("-> Enter starting date (YYYY-MM-DD): ")
+    ending_date = input("-> Enter ending date (leaving blank will download all data since start date): ")
     if ending_date == "":
         ending_date = time.strftime("%Y-%m-%d")
         c_y, c_m, c_d = ending_date.split('-')
@@ -228,7 +228,7 @@ def request():
         # Download frames in the defined time ranges:
         nidentified, ndownloaded = download_frames(sdate, edate, headers, proposal, datafolder)
         if nidentified != 0:
-            print('\t   Final count: ' + str(nidentified) + ' identified frames, downloaded ' +
+            print('-> Final count: ' + str(nidentified) + ' identified frames, downloaded ' +
                   str(ndownloaded) + ' new ones.')
 
         # Get next year, month and day to look for. If it matches the user-defined
@@ -237,4 +237,4 @@ def request():
         if int(c_y) == e_y and int(c_m) == e_m and int(c_d) == e_d:
             break
 
-    print('\n\t Done!\n')
+    print('\n-> Done!\n')

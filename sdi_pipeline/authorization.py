@@ -26,4 +26,4 @@ def get_authorization(username, password):
         return {'Authorization': token}
         
     except:
-        print('\nIncorrect username/password')
+        print('\n-> Incorrect username/password')

@@ -1,24 +1,32 @@
 from initialize import loc
 from master_residual import MR
 import subtract_hotpants
-import subtract_ibi
-import subtract_numpy
+import subtract_ais
 
-if __name__ == '__main__':
-    path = input("\nEnter path to exposure time directory: ")
-    method = input("\nChoose subtraction method: numpy (default), hotpants, image-by-image, or iraf: ")
-    if method == 'numpy' or method == '':
-        subtract_numpy.subtract2(path)
-        MR(path)
-    elif method == 'hotpants':
+def SUBTRACT():
+    path = input("\n-> Enter path to exposure time directory: ")
+    method = input("\n-> Choose subtraction method: hotpants or AIS: ")
+    if method == 'hotpants':
+        align_chi2.chi2(location)
         subtract_hotpants.hotpants(path)
         MR(path)
-    elif method == 'image-by-image':
-        subtract_ibi.subtract3(path)
-        MR(path)
-    elif method == 'iraf':
-        import subtract_iraf
-        subtract_iraf.subtract(path)
+    elif method == 'AIS':
+        align_chi2.chi2(location)
+        subtract_ais.isis_sub(path)
         MR(path)
     else:
-        print("\nError: Unknown method")
+        print("\n-> Error: Unknown method")
+
+if __name__ == '__main__':
+    path = input("\n-> Enter path to exposure time directory: ")
+    method = input("\n-> Choose subtraction method: hotpants or ais: ")
+    if method == 'hotpants':
+        align_chi2.chi2(location)
+        subtract_hotpants.hotpants(path)
+        MR(path)
+    elif method == 'ais':
+        align_chi2.chi2(location)
+        subtract_ais.isis_sub(path)
+        MR(path)
+    else:
+        print("\n-> Error: Unknown method")

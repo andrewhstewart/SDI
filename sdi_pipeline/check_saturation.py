@@ -15,7 +15,7 @@ from initialize import loc
 #%%
 #checks all fits images in a directory for saturation
 def check_saturate(location):
-    print("\nchecking images for saturation...")
+    print("\n-> checking images for saturation...")
     Max = []
     im = []
     m = []
@@ -47,14 +47,14 @@ def check_saturate(location):
         sat = 0
         hdu.close()
     if y > 0:
-        print("\n%d/%d saturated images" % (y, len(images)))
-        print("\naverage saturation level (ADU) = %d" % (np.mean(m)-lin))
+        print("\n-> %d/%d saturated images" % (y, len(images)))
+        print("\n-> average saturation level (ADU) = %d" % (np.mean(m)-lin))
         return im
     if y == 0:
         diff = lin - np.max(Max)
-        print("\nno saturated images in %s" % (location))
-        print("\nclosest value to saturation = %d" % (np.max(Max)))
-        print("\ndifference between this value and saturation level = %d\n" % (diff))
+        print("\n-> no saturated images in %s" % (location))
+        print("\n-> closest value to saturation = %d" % (np.max(Max)))
+        print("\n-> difference between this value and saturation level = %d\n" % (diff))
         return y
     
 #%%
@@ -63,4 +63,4 @@ def move_arch(images):
     archive_data_loc = loc + "/sdi/archive/data"
     for i in images:
         os.system("mv %s %s" % (i, archive_data_loc))
-    print("Saturated images moved to SDI archives")
+    print("-> Saturated images moved to SDI archives")

@@ -4,13 +4,14 @@ with open("README", "r") as fh:
     long_description = fh.read()
 
 setup(name='sdi_pipeline',
-      version='2.5',
+      version='2.6',
       description='Optical SETI Image Subtraction Pipeline',
       long_description=long_description,
       author='Andrew Stewart',
       url='https://github.com/andrewhstewart/SDI.git',
       author_email='andrew.henry.stewart@emory.edu',
       packages=['sdi_pipeline'],
+      include_package_data = True,
 #      py_modules=['sdi_pipeline.align_astroalign',
 #                  'sdi_pipeline.align_iraf',
 #                  'sdi_pipeline.align_template',

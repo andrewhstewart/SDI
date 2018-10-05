@@ -1,9 +1,9 @@
-nstamps_x         10       /*** Number of stamps along X axis ***/
-nstamps_y         10       /*** Number of stamps along Y axis***/
+nstamps_x         8       /*** Number of stamps along X axis ***/
+nstamps_y         8       /*** Number of stamps along Y axis***/
 sub_x             1       /*** Number of sub_division of the image along X axis ***/
 sub_y             1       /*** Number of sub_division of the image along Y axis ***/
-half_mesh_size    9      /*** Half kernel size ***/
-half_stamp_size   15      /*** Half stamp size ***/
+half_mesh_size    5      /*** Half kernel size ***/
+half_stamp_size   10      /*** Half stamp size ***/
 deg_bg            3       /** degree to fit differential bakground variations **/
 saturation        1000000.0   /** degree to fit background varaitions **/
 pix_min           5.0       /*** Minimum vaue of the pixels to fit *****/

@@ -23,6 +23,6 @@ def hotpants(location):
             os.system("./hotpants -inim %s -tmplim %s -outim %s" % (images[x], template[0], outputs[x]))
             x += 1
             per = float(x)/float(len(images)) * 100
-            print("%d subtracted..." % (per))
+            print("-> %.1f subtracted..." % (per))
     else:
-        print("error with number of templates")
+        print("-> error with number of templates")

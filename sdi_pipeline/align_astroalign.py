@@ -18,11 +18,12 @@ import astroalign
 def align2(location):
     x = 1
     images = glob.glob(location + "/*_N_.fits")
-    ref = glob.glob(location + "/*_ref_A_.fits")
+    ref = glob.glob(location + "/*_ref_a_.fits")
     hdu2 = fits.open(ref[0])
     data2 = hdu2[0].data
     data2 = np.array(data2, dtype="float64")  
     for i in images:
+        print("\n-> Aligning images with astroalign...")
         worked = True
         hdu1 = fits.open(i)
         data1 = hdu1[0].data
@@ -32,31 +33,31 @@ def align2(location):
         try:
             aligned = astroalign.register(data1, data2)
         except:
-            view_im = input("\nAlignment failed: View trouble image in ds9? (y/n): ")
+            view_im = input("\n-> Alignment failed: View trouble image in ds9? (y/n): ")
             if view_im == 'y':
                 os.system("ds9 -scale zscale %s" % (i))
             elif view_im == 'n':
                 pass
             else:
-                print("Unknown input: must be y or n")
-            delete = input("\nDelete trouble image from data set? (Do so if image has obvious issues or artifacts) (y/n): ")
+                print("-> Unknown input: must be y or n")
+            delete = input("\n-> Delete trouble image from data set? (Do so if image has obvious issues or artifacts) (y/n): ")
             if delete == 'y':
-                os.system("mkdir -p %s/sdi/archive/'Failed Alignments' ; mv %s %s/sdi/archive/'Failed Alignments'" % (loc, i, loc))
-                print("\nMoved trouble image to 'Failed Alignments' in 'archive' directory")
+                os.system("mkdir -p %s/sdi/archive/failed_alignments ; mv %s %s/sdi/archive/failed_alignments" % (loc, i, loc))
+                print("\n-> Moved trouble image to 'failed_alignments' in 'archive' directory")
             elif delete == 'n':
                 pass
             else:
-                print("\nUnknown input: must be y or n")
+                print("\n-> Unknown input: must be y or n")
             worked = False
             x += 1
         if worked == True:
-            aligned_name = i[:-8] + "_A_.fits"
+            aligned_name = i[:-8] + "_a_.fits"
             hdu = fits.PrimaryHDU(aligned, header=hdu1[0].header)
             hdu.writeto(aligned_name)
             hdu1.close()
             os.system("mv %s %s/sdi/archive/data" % (i, loc))
             percent = float(x)/float(len(images)) * 100
-            print("%.1f%% aligned..." % (percent))
+            print("-> %.1f%% aligned..." % (percent))
             x += 1
     hdu2.close()
     

@@ -1,83 +1,95 @@
 import align_astroalign
-import align_template
 from ref_image import ref_image
 from initialize import loc
 import subtract_hotpants
-import subtract_ibi
-import subtract_numpy
 import combine_swarp
 import combine_numpy
-import sex
+import extract
 import check_saturation
-from master_residual import MR
+import get
+import subtract_ais
+import align_chi2
 
-if __name__ == '__main__':
-    location = input("Enter path to data directory: ")
-    sat = check_saturation.check_saturate(location)
-    if sat == 0:
-        ref_image(location)
-        alignment = input("Enter alignment method (enter iraf or astroalign): ")
-        if alignment == "iraf":
-            import align_iraf
-            align_iraf.align(location)
-        elif alignment == "astroalign":
+def PIPELINE():
+    get_check = input("-> Get data or analyze existing data? (get/analyze): ")
+    if get_check == 'get':
+        get.GET()
+    elif get_check == 'analyze':
+        location = input("-> Enter path to data directory: ")
+        sat = check_saturation.check_saturate(location)
+        if sat == 0:
+            ref_image(location)
             align_astroalign.align2(location)
         else:
-            print("Error: unknown method")
-    else:
-        check = input("Saturated images found, continue image alignment? (y/n): ")
-        if check == 'y':
-            move = input("Move saturated images to SDI archives before continuing? (y/n): ")
-            if move == 'y':
-                check_saturation.move_arch(sat)
-                ref_image(location)
-                alignment = input("Enter alignment method (enter iraf or astroalign): ")
-                if alignment == "iraf":
-                    import align_iraf
-                    align_iraf.align(location)
-                elif alignment == "astroalign":
+            check = input("-> Saturated images found, continue image alignment? (y/n): ")
+            if check == 'y':
+                move = input("-> Move saturated images to SDI archives before continuing? (y/n): ")
+                if move == 'y':
+                    check_saturation.move_arch(sat)
+                    ref_image(location)
                     align_astroalign.align2(location)
                 else:
-                    print("Error: unknown method")
-            else:
-                ref_image(location)
-                alignment = input("Enter alignment method (enter iraf or astroalign): ")
-                if alignment == "iraf":
-                    import align_iraf
-                    align_iraf.align(location)
-                elif alignment == "astroalign":
+                    ref_image(location)
+                    align_astroalign.align2(location)
+        method = input("-> Choose combination method-- numpy (default) or swarp: ")
+        if method == "swarp":
+            combine_swarp.swarp(location)
+        elif method == "numpy" or method == "":
+            combine_numpy.combine_median(location)
+        else:
+            print("-> Error: unknown method entered")
+        path = location[:-5]
+        sub_method = input("\n-> Choose subtraction method-- ais (default) or hotpants: ")
+        if sub_method == '' or sub_method == 'ais':
+            subtract_ais.isis_sub(path)
+        elif sub_method == 'hotpants':
+            subtract_hotpants.hotpants(path)
+        else:
+            print("\n-> Error: Unknown method")
+        ask = input("-> Run sextractor on residual images? (y/n): ")
+        if ask == 'y':
+            extract.SEXTRACTOR(path)
+        elif ask != 'y' and ask != 'n':
+            print("-> Error: unknown input")
+
+if __name__ == '__main__':
+    get_check = input("-> Get data or analyze existing data? (get/analyze): ")
+    if get_check == 'get':
+        get.GET()
+    elif get_check == 'analyze':
+        location = input("-> Enter path to data directory: ")
+        sat = check_saturation.check_saturate(location)
+        if sat == 0:
+            ref_image(location)
+            align_astroalign.align2(location)
+        else:
+            check = input("-> Saturated images found, continue image alignment? (y/n): ")
+            if check == 'y':
+                move = input("-> Move saturated images to SDI archives before continuing? (y/n): ")
+                if move == 'y':
+                    check_saturation.move_arch(sat)
+                    ref_image(location)
                     align_astroalign.align2(location)
                 else:
-                    print("Error: unknown method")
-    method = input("Choose combination method-- numpy (default), swarp, or iraf: ")
-    if method == "swarp":
-        combine_swarp.swarp(location)
-    elif method == "numpy" or method == "":
-        combine_numpy.combine_median(location)
-    elif method == "iraf":
-        import combine_iraf
-        combine_iraf.combine(location)
-    else:
-        print("Error: unknown method entered")
-    path = location[:-5]
-    method = input("\nChoose subtraction method: numpy (default), hotpants, image-by-image, or iraf: ")
-    if method == 'numpy' or method == '':
-        subtract_numpy.subtract2(path)
-        MR(path)
-    elif method == 'hotpants':
-        subtract_hotpants.hotpants(path)
-        MR(path)
-    elif method == 'image-by-image':
-        subtract_ibi.subtract3(path)
-        MR(path)
-    elif method == 'iraf':
-        import subtract_iraf
-        subtract_iraf.subtract(path)
-        MR(path)
-    else:
-        print("\nError: Unknown method")
-    ask = input("Run sextractor on residual images? (y/n): ")
-    if ask == 'y':
-        sex.sex(path)
-    elif ask != 'y' and ask != 'n':
-        print("Error: unknown input")
+                    ref_image(location)
+                    align_astroalign.align2(location)
+        method = input("-> Choose combination method-- numpy (default) or swarp: ")
+        if method == "swarp":
+            combine_swarp.swarp(location)
+        elif method == "numpy" or method == "":
+            combine_numpy.combine_median(location)
+        else:
+            print("-> Error: unknown method entered")
+        path = location[:-5]
+        sub_method = input("\n-> Choose subtraction method-- ais (default) or hotpants: ")
+        if sub_method == '' or sub_method == 'ais':
+            subtract_ais.isis_sub(path)
+        elif sub_method == 'hotpants':
+            subtract_hotpants.hotpants(path)
+        else:
+            print("\n-> Error: Unknown method")
+        ask = input("-> Run sextractor on residual images? (y/n): ")
+        if ask == 'y':
+            extract.SEXTRACTOR(path)
+        elif ask != 'y' and ask != 'n':
+            print("-> Error: unknown input")

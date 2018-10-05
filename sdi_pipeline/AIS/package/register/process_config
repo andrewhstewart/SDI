@@ -1,6 +1,6 @@
-IM_DIR        ../images     Directory where the images are
+IM_DIR        /home/andrew/sdi     Directory where the images are
 MRJ_DIR       ..            Installation directory
-REFERENCE     test0.fits    Reference image for astrometry
+REFERENCE     /home/andrew/sdi/09:16:13.876_ref_A_.fits    Reference image for astrometry
 REF_SUB       ref.fits      Reference image for subtraction
 INFILE        ../register/dates         Dates of the frames
 VARIABLES     phot.data     coordinates of objects for which we want to make light curves
