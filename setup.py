@@ -4,13 +4,15 @@ with open("README", "r") as fh:
     long_description = fh.read()
 
 setup(name='sdi_pipeline',
-      version='2.6',
+      version='3.2',
       description='Optical SETI Image Subtraction Pipeline',
       long_description=long_description,
       author='Andrew Stewart',
       url='https://github.com/andrewhstewart/SDI.git',
       author_email='andrew.henry.stewart@emory.edu',
       packages=['sdi_pipeline'],
+      package_dir={'sdi_pipeline': 'sdi_pipeline'},
+      package_data={'sdi_pipeline': ['AIS/package/*', 'AIS/package/abs/*', 'AIS/package/bin/*', 'AIS/package/Bphot/*', 'AIS/package/Cphot/*', 'AIS/package/cross/*', 'AIS/package/czerny/*', 'AIS/package/detect/*', 'AIS/package/extract/*', 'AIS/package/fit2d/*', 'AIS/package/images/*', 'AIS/package/interp/*', 'AIS/package/images2/*', 'AIS/package/phot_ref/*', 'AIS/package/register/*', 'AIS/package/stack/*', 'AIS/package/subtract/*', 'AIS/package/utils/*', 'config/*', 'test_config/*']},
       include_package_data = True,
 #      py_modules=['sdi_pipeline.align_astroalign',
 #                  'sdi_pipeline.align_iraf',

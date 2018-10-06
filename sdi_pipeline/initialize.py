@@ -40,7 +40,7 @@ def INITIALIZE():
         print("-> Change loc variable in initialize.py to desired SDI directory path, then run script again")
     else:
         print("-> Error: unknown input")
-    ais_install = input("\t-> Install ISIS image subtraction on this machine? (y/n): ")
+    ais_install = input("-> Install ISIS image subtraction on this machine? (y/n): ")
     if ais_install == 'y':
         ais_run = os.path.dirname(stats.__file__) + '/AIS/package/./install.csh'
         os.system(ais_run)
@@ -52,13 +52,13 @@ def INITIALIZE():
 #%%
 #if this architecture does not exist, create it
 if __name__ == '__main__':
-    alert = input("\t-> Create SDI directories in %s? (y/n): " % (loc))
+    alert = input("-> Create SDI directories in %s? (y/n): " % (loc))
     if alert == 'y':
         initialize(loc)
     elif alert == 'n':
-        print("\t-> Change loc variable in initialize.py to desired SDI directory path, then run script again")
+        print("-> Change loc variable in initialize.py to desired SDI directory path, then run script again")
     else:
-        print("\t-> Error: unknown input")
+        print("-> Error: unknown input")
     ais_install = input("\t-> Install ISIS image subtraction on this machine? (y/n): ")
     if ais_install == 'y':
         ais_run = os.path.dirname(stats.__file__) + '/AIS/package/./install.csh'
@@ -66,4 +66,4 @@ if __name__ == '__main__':
     elif ais_install == 'n':
         pass
     else:
-        print("\t-> Error: unknown input")
+        print("-> Error: unknown input")

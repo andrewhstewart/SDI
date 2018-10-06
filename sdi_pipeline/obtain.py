@@ -125,6 +125,7 @@ def rename(tar):
             create("%s/%s_%s/%s/%s" % (target, ra, dec, fltr, exp))
             os.system("mv %s %s/%s_%s/%s/%s/data" % (f, target, ra, dec, fltr, exp))
             os.system("mv %s/%s_%s/%s/%s/data/%s %s/%s_%s/%s/%s/data/%s_N_.fits" % (target, ra, dec, fltr, exp, F, target, ra, dec, fltr, exp, stoptime))
+            data_loc =  "%s/%s_%s/%s/%s/data" % (target, ra, dec, fltr, exp)
         if check == True:
             check2 = os.path.exists("%s/%s_%s/%s" % (target, ra, dec, fltr))
             if check2 == False:
@@ -133,6 +134,7 @@ def rename(tar):
                 create("%s/%s_%s/%s/%s" % (target, ra, dec, fltr, exp))
                 os.system("mv %s %s/%s_%s/%s/%s/data" % (f, target, ra, dec, fltr, exp))
                 os.system("mv %s/%s_%s/%s/%s/data/%s %s/%s_%s/%s/%s/data/%s_N_.fits" % (target, ra, dec, fltr, exp, F, target, ra, dec, fltr, exp, stoptime))
+                data_loc =  "%s/%s_%s/%s/%s/data" % (target, ra, dec, fltr, exp)
             if check2 == True:
                 check3 = os.path.exists("%s/%s_%s/%s/%s" % (target, ra, dec, fltr, exp))
                 if check3 == False:
@@ -140,10 +142,13 @@ def rename(tar):
                     create("%s/%s_%s/%s/%s" % (target, ra, dec, fltr, exp))
                     os.system("mv %s %s/%s_%s/%s/%s/data" % (f, target, ra, dec, fltr, exp))
                     os.system("mv %s/%s_%s/%s/%s/data/%s %s/%s_%s/%s/%s/data/%s_N_.fits" % (target, ra, dec, fltr, exp, F, target, ra, dec, fltr, exp, stoptime))
+                    data_loc =  "%s/%s_%s/%s/%s/data" % (target, ra, dec, fltr, exp)
                 if check3 == True:
                     os.system("mv %s %s/%s_%s/%s/%s/data" % (f, target, ra, dec, fltr, exp))
                     os.system("mv %s/%s_%s/%s/%s/data/%s %s/%s_%s/%s/%s/data/%s_N_.fits" % (target, ra, dec, fltr, exp, F, target, ra, dec, fltr, exp, stoptime))
+                    data_loc =  "%s/%s_%s/%s/%s/data" % (target, ra, dec, fltr, exp)
         x.append(one)
         hdu.close()
     print("-> %d images grouped into location directories\n" % (sum(x)))
+    return data_loc
     

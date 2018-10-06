@@ -13,6 +13,7 @@ import subtract
 import extract
 import pipeline
 import initialize
+import test
 
 if __name__ == '__main__':
     print('\n\t -----------------------------------------------------')
@@ -37,5 +38,7 @@ if __name__ == '__main__':
         pipeline.PIPELINE()
     elif method == 'initialize':
         initialize.INITIALIZE()
+    elif method == 'test':
+        test.TEST()
     else:
         print("-> Error: Method not recognized")
