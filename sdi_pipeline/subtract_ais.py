@@ -9,7 +9,7 @@ Created on Thu Sep 20 17:24:29 2018
 import glob
 import os
 import shutil
-import align
+import initialize
 
 def isis_sub(location):
     x = 0
@@ -18,8 +18,9 @@ def isis_sub(location):
     if images == []:
         print("-> Subtraction failure: No images to subtract")
     elif len(template) == 1:
-        ais_loc = os.path.dirname(align.__file__) + "/AIS/package/bin/./mrj_phot"
-        ais_config_loc = os.path.dirname(align.__file__) + "/config/default_config"
+        ais_loc = os.path.dirname(initialize.__file__) + "/AIS/package/bin/./mrj_phot"
+        initialize.create_configs(location)
+        ais_config_loc = location + '/configs/default_config'
         cwd = os.getcwd()
         os.mkdir(cwd + "/AIS_temp")
         os.chdir(cwd + "/AIS_temp")
@@ -43,8 +44,9 @@ def isis_sub_test(location):
     if images == []:
         print("-> Subtraction failure: No images to subtract")
     elif len(template) == 1:
-        ais_loc = os.path.dirname(align.__file__) + "/AIS/package/bin/./mrj_phot"
-        ais_config_loc = os.path.dirname(align.__file__) + "/test_config/default_config"
+        ais_loc = os.path.dirname(initialize.__file__) + "/AIS/package/bin/./mrj_phot"
+        initialize.create_configs(location)
+        ais_config_loc = location + '/configs/default_config'
         cwd = os.getcwd()
         os.mkdir(cwd + "/AIS_temp")
         os.chdir(cwd + "/AIS_temp")

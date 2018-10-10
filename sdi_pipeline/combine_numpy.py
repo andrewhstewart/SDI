@@ -17,7 +17,7 @@ from astropy.io import fits
 def combine_median(location):
     location = location[:-5]
     data = []
-    images = glob.glob(location + "/data" + "/*_a_.fits")
+    images = glob.glob(location + "/data" + "/*_A_.fits")
     log_loc = location + "/templates/log.txt"
     log_list = open(log_loc, "a+")
     time = strftime("%Y-%m-%d %H:%M:%S", gmtime())

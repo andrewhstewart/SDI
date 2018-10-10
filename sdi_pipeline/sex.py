@@ -8,12 +8,13 @@ Created on Mon Jun  4 13:04:32 2018
 
 import os
 import glob
-import align
+import initialize
 
 def src_filter(location):
     source_loc = location + '/sources'
-    source_files = glob.glob(source_loc + '/*.txt')
-    for file in source_files:
+    temp_source_loc = source_loc + '/temp'
+    temp_source_files = glob.glob(temp_source_loc + '/*.txt')
+    for file in temp_source_files:
         with open(file, 'r') as fl:
             data = fl.readlines()
             fl.close()
@@ -26,8 +27,8 @@ def src_filter(location):
         
     #filter source file by spread_model
     del_lin = []
-    source = glob.glob(source_loc + '/*.txt')
-    with open(source[0], 'r') as src:
+#    source = glob.glob(source_loc + '/*.txt')
+    with open(source_loc + '/sources.txt', 'r') as src:
         lines = src.readlines()
         src.close()
         
@@ -43,12 +44,9 @@ def src_filter(location):
             
     lines = [a for a in lines if a not in del_lin]
     
-    with open(source[0], 'w+') as src:
-        src.writelines(lines)
-        src.close()
-    
-    for l in lines:
-        print(l)
+    with open(source_loc + '/filtered_sources.txt', 'w+') as fil_src:
+        fil_src.writelines(lines)
+        fil_src.close()
 
 #%%
 #runs SExtractor on all residual images in a directory
@@ -57,16 +55,22 @@ def sextractor(location):
     sources = location + "/sources"
     residuals = location + "/residuals"
     check = os.path.exists(sources)
+    check_temp = os.path.exists(sources + '/temp')
     length = len(residuals) + 1
     if check == False:
         os.system("mkdir %s" % (sources))
+        os.system("mkdir %s/temp" % (sources))
+    else:
+        if check_temp == False:
+            os.system("mkdir %s/temp" % (sources))
     images = glob.glob(residuals + "/*.fits")
-    config_loc = os.path.dirname(align.__file__) + '/config/default.sex'
+    initialize.create_configs(location)
+    config_loc = location + '/configs/default.sex'
     with open(config_loc, 'r') as config:
         data = config.readlines()
         config.close()
-    data[9] = "PARAMETERS_NAME" + "        " + os.path.dirname(align.__file__) + "/config/default.param" + "\n"
-    data[20] = "FILTER_NAME" + "        " + os.path.dirname(align.__file__) + "/config/default.conv" + "\n"
+    data[9] = "PARAMETERS_NAME" + "        " + location + "/configs/default.param" + "\n"
+    data[20] = "FILTER_NAME" + "        " + location + "/configs/default.conv" + "\n"
     with open(config_loc, 'w') as config:
         config.writelines(data)
         config.close()
@@ -80,43 +84,7 @@ def sextractor(location):
         with open(config_loc, 'w') as config:
             config.writelines(data)
             config.close()
-        os.system("sextractor %s> %s/%s.txt -c %s" % (i, sources, name, config_loc))
-        x += 1
-        per = float(x)/float(len(images)) * 100
-        print("-> %.1f%% sextracted..." % (per))
-    print("-> SExtracted %d images, catalogues placed in 'sources' directory\n" % (len(images)))
-    print("-> Filtering source catalogs...\n")
-    src_filter(location)
-
-def sextractor_test(location):
-    x = 0
-    sources = location + "/sources"
-    residuals = location + "/residuals"
-    check = os.path.exists(sources)
-    length = len(residuals) + 1
-    if check == False:
-        os.system("mkdir %s" % (sources))
-    images = glob.glob(residuals + "/*.fits")
-    config_loc = os.path.dirname(align.__file__) + '/test_config/default.sex'
-    with open(config_loc, 'r') as config:
-        data = config.readlines()
-        config.close()
-    data[9] = "PARAMETERS_NAME" + "        " + os.path.dirname(align.__file__) + "/test_config/default.param" + "\n"
-    data[20] = "FILTER_NAME" + "        " + os.path.dirname(align.__file__) + "/test_config/default.conv" + "\n"
-    with open(config_loc, 'w') as config:
-        config.writelines(data)
-        config.close()
-    print("\n-> SExtracting images...")
-    for i in images:
-        name = i[length:-5]
-        with open(config_loc, 'r') as config:
-            data = config.readlines()
-            config.close()
-        data[104] = "PSF_NAME" + "        " + location + "/psf/" + name[:-9] + ".psf" + "\n"
-        with open(config_loc, 'w') as config:
-            config.writelines(data)
-            config.close()
-        os.system("sextractor %s> %s/%s.txt -c %s" % (i, sources, name, config_loc))
+        os.system("sextractor %s[0]> %s/temp/%s.txt -c %s" % (i, sources, name, config_loc))
         x += 1
         per = float(x)/float(len(images)) * 100
         print("-> %.1f%% sextracted..." % (per))
@@ -133,12 +101,13 @@ def sextractor_psf(location):
     if check == False:
         os.system("mkdir %s" % (psf_loc))
     images = glob.glob(data + "/*.fits")
-    config_loc = os.path.dirname(align.__file__) + '/config/psf.sex'
+    initialize.create_configs(location)
+    config_loc = location + '/configs/psf.sex'
     with open(config_loc, 'r') as config:
         data = config.readlines()
         config.close()
-    data[9] = "PARAMETERS_NAME" + "        " + os.path.dirname(align.__file__) + "/config/default.psfex" + "\n"
-    data[20] = "FILTER_NAME" + "        " + os.path.dirname(align.__file__) + "/config/default.conv" + "\n"
+    data[9] = "PARAMETERS_NAME" + "        " + location + "/configs/default.psfex" + "\n"
+    data[20] = "FILTER_NAME" + "        " + location + "/configs/default.conv" + "\n"
     with open(config_loc, 'w') as config:
         config.writelines(data)
         config.close()
@@ -152,43 +121,10 @@ def sextractor_psf(location):
         with open(config_loc, 'w') as config:
             config.writelines(data)
             config.close()
-        os.system("sextractor %s -c %s" % (i, config_loc))
+        os.system("sextractor %s[0] -c %s" % (i, config_loc))
         x += 1
         per = float(x)/float(len(images)) * 100
         print("-> %.1f%% sextracted..." % (per))
     print("-> SExtracted %d images, catalogues placed in 'psf' directory\n" % (len(images)))
 
-def sextractor_test_psf(location):
-    x = 0
-    psf_loc = location + "/psf"
-    data = location + "/data"
-    check = os.path.exists(psf_loc)
-    length = len(data) + 1
-    if check == False:
-        os.system("mkdir %s" % (psf_loc))
-    images = glob.glob(data + "/*.fits")
-    config_loc = os.path.dirname(align.__file__) + '/test_config/psf.sex'
-    with open(config_loc, 'r') as config:
-        data = config.readlines()
-        config.close()
-    data[9] = "PARAMETERS_NAME" + "        " + os.path.dirname(align.__file__) + "/test_config/default.psfex" + "\n"
-    data[20] = "FILTER_NAME" + "        " + os.path.dirname(align.__file__) + "/test_config/default.conv" + "\n"
-    with open(config_loc, 'w') as config:
-        config.writelines(data)
-        config.close()
-    print("\n-> SExtracting images...")
-    for i in images:
-        name = i[length:-5]
-        with open(config_loc, 'r') as config:
-            data = config.readlines()
-            config.close()
-        data[6] = "CATALOG_NAME" + "        " + psf_loc + "/" + name + ".cat" + "\n"
-        with open(config_loc, 'w') as config:
-            config.writelines(data)
-            config.close()
-        os.system("sextractor %s -c %s" % (i, config_loc))
-        x += 1
-        per = float(x)/float(len(images)) * 100
-        print("-> %.1f%% sextracted..." % (per))
-    print("-> SExtracted %d images, catalogues placed in 'psf' directory\n" % (len(images)))
     

@@ -6,6 +6,8 @@ sdi_pipeline/__init__.py
 sdi_pipeline/align.py
 sdi_pipeline/align_astroalign.py
 sdi_pipeline/align_chi2.py
+sdi_pipeline/align_imreg.py
+sdi_pipeline/align_skimage.py
 sdi_pipeline/align_template.py
 sdi_pipeline/authorization.py
 sdi_pipeline/check_saturation.py
@@ -28,6 +30,7 @@ sdi_pipeline/ref_image.py
 sdi_pipeline/run.py
 sdi_pipeline/saturate.py
 sdi_pipeline/sex.py
+sdi_pipeline/sim.py
 sdi_pipeline/simulation.py
 sdi_pipeline/stars.py
 sdi_pipeline/stats.py
@@ -546,11 +549,13 @@ sdi_pipeline/config/default.param
 sdi_pipeline/config/default.psfex
 sdi_pipeline/config/default.sex
 sdi_pipeline/config/default.swarp
+sdi_pipeline/config/default_config
 sdi_pipeline/config/fakesex_config
 sdi_pipeline/config/fakesex_param
 sdi_pipeline/config/psf.sex
 sdi_pipeline/config/psfex.config
 sdi_pipeline/config/sky.config
+sdi_pipeline/test_config/09:14:00.260_A_residual_.fits
 sdi_pipeline/test_config/default.conv
 sdi_pipeline/test_config/default.nnw
 sdi_pipeline/test_config/default.param

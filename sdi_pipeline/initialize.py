@@ -1,6 +1,7 @@
 from os.path import expanduser
 import os
 import stats
+import glob
 
 loc = expanduser("~")
 
@@ -32,6 +33,15 @@ def create(location):
     print("-> data, templates, residuals, sources, and psf directories created in %s\n" % (location))
 
 #%%
+def create_configs(location):
+    check_configs = location + '/configs'
+    if os.path.exists(check_configs) == False:
+        os.mkdir(check_configs)
+    config_loc = os.path.dirname(stats.__file__) + '/config'
+    for files in glob.glob(config_loc + '/*'):
+        os.system('cp -n %s %s' % (files, check_configs))
+
+#%%
 def INITIALIZE():
     alert = input("-> Create SDI directories in %s? (y/n)\n" % (loc))
     if alert == 'y':
@@ -59,7 +69,7 @@ if __name__ == '__main__':
         print("-> Change loc variable in initialize.py to desired SDI directory path, then run script again")
     else:
         print("-> Error: unknown input")
-    ais_install = input("\t-> Install ISIS image subtraction on this machine? (y/n): ")
+    ais_install = input("-> Install ISIS image subtraction on this machine? (y/n): ")
     if ais_install == 'y':
         ais_run = os.path.dirname(stats.__file__) + '/AIS/package/./install.csh'
         os.system(ais_run)

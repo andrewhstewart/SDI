@@ -27,6 +27,7 @@ def check_saturate(location):
     for i in images:
         hdu = fits.open(i)
         lin = hdu[0].header['SATURATE']
+        satur = hdu[0].header['MAXLIN']
         data = hdu[0].data
 #        rows = np.size(data, axis=0)
 #        cols = np.size(data, axis=1)
@@ -34,10 +35,12 @@ def check_saturate(location):
 #            for c in np.arange(cols):
 #                if data[r, c] > lin:
 #                    x += 1
+        if satur > lin:
+            lin = satur
         sat = ((data>lin)).sum()
 #        ind = np.unravel_index(np.argmax(data, axis=None), data.shape)
 #        excess = data[ind[0], ind[1]] - lin
-        if sat > 5:
+        if sat > 10:
 #            print "\n%s saturated | # saturated pixels = %d | max pixel location = (%d, %d)\nmax value over linearity limit = %d" % (i[length:], x, ind[0], ind[1], excess)
             y += 1
             im.append(i)
@@ -60,7 +63,10 @@ def check_saturate(location):
 #%%
 #move images into archives
 def move_arch(images):
-    archive_data_loc = loc + "/sdi/archive/data"
+    archive_data_loc = loc + "/sdi/archive/saturated_images"
+    check = os.path.exists(archive_data_loc)
+    if check == False:
+        os.mkdir(archive_data_loc)
     for i in images:
         os.system("mv %s %s" % (i, archive_data_loc))
     print("-> Saturated images moved to SDI archives")

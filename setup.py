@@ -4,7 +4,7 @@ with open("README", "r") as fh:
     long_description = fh.read()
 
 setup(name='sdi_pipeline',
-      version='3.2',
+      version='3.3',
       description='Optical SETI Image Subtraction Pipeline',
       long_description=long_description,
       author='Andrew Stewart',

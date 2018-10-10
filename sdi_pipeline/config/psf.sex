@@ -4,7 +4,7 @@
  
 #-------------------------------- Catalog ------------------------------------
  
-CATALOG_NAME       STDOUT
+CATALOG_NAME        /home/andrew/sdi/targets/TEST/21:40:47.388_+00:28:35.11/B/90/psf/09:16:13.876_ref_A_.cat
 CATALOG_TYPE     FITS_LDAC     # NONE,ASCII,ASCII_HEAD, ASCII_SKYCAT,
                                 # ASCII_VOTABLE, FITS_1.0 or FITS_LDAC
 PARAMETERS_NAME        /home/andrew/sdi_pipeline/sdi_pipeline/config/default.psfex

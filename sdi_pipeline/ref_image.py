@@ -15,17 +15,17 @@ import os
 #rename lowest noise image to be the reference image
 def ref_image(location):
     noise = []
-    ref = glob.glob(location + "/*_ref_a_.fits")
+    ref = glob.glob(location + "/*_ref_A_.fits")
     length = len(location) + 1
     if ref == []:
-        print("-> Selecting reference image...")
+        print("\n-> Selecting reference image...")
         images = glob.glob(location + "/*.fits")
         for i in images:
             hdu = fits.open(i)
             data = hdu[0].data
             noise.append(np.mean(data))
         im = images[np.argmin(noise)]
-        reference = location + "/" + im[length:-8] + "_ref_a_.fits"
+        reference = location + "/" + im[length:-8] + "_ref_A_.fits"
         os.system("mv %s %s" % (im, reference))
         print("-> designated %s as the reference image in this directory\n" % (im))
     else:

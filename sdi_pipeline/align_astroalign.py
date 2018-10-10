@@ -18,12 +18,12 @@ import astroalign
 def align2(location):
     x = 1
     images = glob.glob(location + "/*_N_.fits")
-    ref = glob.glob(location + "/*_ref_a_.fits")
+    ref = glob.glob(location + "/*_ref_A_.fits")
     hdu2 = fits.open(ref[0])
     data2 = hdu2[0].data
-    data2 = np.array(data2, dtype="float64")  
+    data2 = np.array(data2, dtype="float64")
+    print("\n-> Aligning images with astroalign...")
     for i in images:
-        print("\n-> Aligning images with astroalign...")
         worked = True
         hdu1 = fits.open(i)
         data1 = hdu1[0].data
@@ -51,7 +51,7 @@ def align2(location):
             worked = False
             x += 1
         if worked == True:
-            aligned_name = i[:-8] + "_a_.fits"
+            aligned_name = i[:-8] + "_A_.fits"
             hdu = fits.PrimaryHDU(aligned, header=hdu1[0].header)
             hdu.writeto(aligned_name)
             hdu1.close()

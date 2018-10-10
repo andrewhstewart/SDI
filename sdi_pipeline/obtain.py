@@ -71,20 +71,24 @@ def process():
     
 #%%
 #moves data from /sdi/temp to its respective target directory
-def movetar(tar):
-    check = os.path.exists("%s/sdi/targets/%s" % (loc, tar))
-    if check == False:
-        os.system("mkdir %s/sdi/targets/%s" % (loc, tar))
-        os.system("mkdir %s/sdi/targets/%s/raw_data" % (loc, tar))
+def movetar():
+    print("-> Moving data into target directories...")
     one = 1
     x = []
     y = []
     temp = "%s/sdi/temp" % (loc)
-    data = "%s/sdi/targets/%s" % (loc, tar)
-    raw_data = "%s/sdi/targets/%s/raw_data" % (loc, tar)
     for d in os.listdir(temp):
         files = glob.glob(temp + "/" + d + "/*.fits")
         for f in files:
+            hdu = fits.open(f)
+            tar = hdu[0].header['OBJECT']
+            tar = tar.replace(' ', '_')
+            data = "%s/sdi/targets/%s" % (loc, tar)
+            raw_data = "%s/sdi/targets/%s/raw_data" % (loc, tar)
+            check = os.path.exists(data)
+            if check == False:
+                os.system("mkdir %s/sdi/targets/%s" % (loc, tar))
+                os.system("mkdir %s/sdi/targets/%s/raw_data" % (loc, tar))
             if f[-7] == "9":
                 os.system("mv %s %s" % (f, data))
                 x.append(one)
@@ -104,51 +108,57 @@ def movetar(tar):
         
 #%%
 #group images of same RA and DEC together in their own directories
-def rename(tar):
+def rename():
+    print("-> Grouping dataa by RA/DEC/Filter/ExposureTime...")
     x = []
     one = 1
-    target = "%s/sdi/targets/%s" % (loc, tar)
-    length = len(target) + 1
-    for f in glob.glob("%s/*.fits" % (target)):
-        F = f[length:]
-        hdu = fits.open(f)
-        ra = hdu[0].header['CAT-RA']
-        dec = hdu[0].header['CAT-DEC']
-        fltr = hdu[0].header['FILTER']
-        exp = round(int(hdu[0].header['EXPTIME']))
-        stoptime = hdu[0].header['UTSTOP']
-        check = os.path.exists("%s/%s_%s" % (target, ra, dec))
-        if check == False:
-            os.system("mkdir %s/%s_%s" % (target, ra, dec))
-            os.system("mkdir %s/%s_%s/%s" % (target, ra, dec, fltr))
-            os.system("mkdir %s/%s_%s/%s/%s" % (target, ra, dec, fltr, exp))
-            create("%s/%s_%s/%s/%s" % (target, ra, dec, fltr, exp))
-            os.system("mv %s %s/%s_%s/%s/%s/data" % (f, target, ra, dec, fltr, exp))
-            os.system("mv %s/%s_%s/%s/%s/data/%s %s/%s_%s/%s/%s/data/%s_N_.fits" % (target, ra, dec, fltr, exp, F, target, ra, dec, fltr, exp, stoptime))
-            data_loc =  "%s/%s_%s/%s/%s/data" % (target, ra, dec, fltr, exp)
-        if check == True:
-            check2 = os.path.exists("%s/%s_%s/%s" % (target, ra, dec, fltr))
-            if check2 == False:
+    tars = []
+    targets = loc + '/sdi/targets'
+    for d in os.listdir(targets):
+        tars.append(d)
+    for t in tars:
+        target = targets + '/' + t
+        length = len(target) + 1
+        for f in glob.glob("%s/*.fits" % (target)):
+            F = f[length:]
+            hdu = fits.open(f)
+            ra = hdu[0].header['CAT-RA']
+            dec = hdu[0].header['CAT-DEC']
+            fltr = hdu[0].header['FILTER']
+            exp = round(hdu[0].header['EXPTIME'])
+            stoptime = hdu[0].header['UTSTOP']
+            check = os.path.exists("%s/%s_%s" % (target, ra, dec))
+            if check == False:
+                os.system("mkdir %s/%s_%s" % (target, ra, dec))
                 os.system("mkdir %s/%s_%s/%s" % (target, ra, dec, fltr))
                 os.system("mkdir %s/%s_%s/%s/%s" % (target, ra, dec, fltr, exp))
                 create("%s/%s_%s/%s/%s" % (target, ra, dec, fltr, exp))
                 os.system("mv %s %s/%s_%s/%s/%s/data" % (f, target, ra, dec, fltr, exp))
                 os.system("mv %s/%s_%s/%s/%s/data/%s %s/%s_%s/%s/%s/data/%s_N_.fits" % (target, ra, dec, fltr, exp, F, target, ra, dec, fltr, exp, stoptime))
                 data_loc =  "%s/%s_%s/%s/%s/data" % (target, ra, dec, fltr, exp)
-            if check2 == True:
-                check3 = os.path.exists("%s/%s_%s/%s/%s" % (target, ra, dec, fltr, exp))
-                if check3 == False:
+            if check == True:
+                check2 = os.path.exists("%s/%s_%s/%s" % (target, ra, dec, fltr))
+                if check2 == False:
+                    os.system("mkdir %s/%s_%s/%s" % (target, ra, dec, fltr))
                     os.system("mkdir %s/%s_%s/%s/%s" % (target, ra, dec, fltr, exp))
                     create("%s/%s_%s/%s/%s" % (target, ra, dec, fltr, exp))
                     os.system("mv %s %s/%s_%s/%s/%s/data" % (f, target, ra, dec, fltr, exp))
                     os.system("mv %s/%s_%s/%s/%s/data/%s %s/%s_%s/%s/%s/data/%s_N_.fits" % (target, ra, dec, fltr, exp, F, target, ra, dec, fltr, exp, stoptime))
                     data_loc =  "%s/%s_%s/%s/%s/data" % (target, ra, dec, fltr, exp)
-                if check3 == True:
-                    os.system("mv %s %s/%s_%s/%s/%s/data" % (f, target, ra, dec, fltr, exp))
-                    os.system("mv %s/%s_%s/%s/%s/data/%s %s/%s_%s/%s/%s/data/%s_N_.fits" % (target, ra, dec, fltr, exp, F, target, ra, dec, fltr, exp, stoptime))
-                    data_loc =  "%s/%s_%s/%s/%s/data" % (target, ra, dec, fltr, exp)
-        x.append(one)
-        hdu.close()
+                if check2 == True:
+                    check3 = os.path.exists("%s/%s_%s/%s/%s" % (target, ra, dec, fltr, exp))
+                    if check3 == False:
+                        os.system("mkdir %s/%s_%s/%s/%s" % (target, ra, dec, fltr, exp))
+                        create("%s/%s_%s/%s/%s" % (target, ra, dec, fltr, exp))
+                        os.system("mv %s %s/%s_%s/%s/%s/data" % (f, target, ra, dec, fltr, exp))
+                        os.system("mv %s/%s_%s/%s/%s/data/%s %s/%s_%s/%s/%s/data/%s_N_.fits" % (target, ra, dec, fltr, exp, F, target, ra, dec, fltr, exp, stoptime))
+                        data_loc =  "%s/%s_%s/%s/%s/data" % (target, ra, dec, fltr, exp)
+                    if check3 == True:
+                        os.system("mv %s %s/%s_%s/%s/%s/data" % (f, target, ra, dec, fltr, exp))
+                        os.system("mv %s/%s_%s/%s/%s/data/%s %s/%s_%s/%s/%s/data/%s_N_.fits" % (target, ra, dec, fltr, exp, F, target, ra, dec, fltr, exp, stoptime))
+                        data_loc =  "%s/%s_%s/%s/%s/data" % (target, ra, dec, fltr, exp)
+            x.append(one)
+            hdu.close()
     print("-> %d images grouped into location directories\n" % (sum(x)))
     return data_loc
     

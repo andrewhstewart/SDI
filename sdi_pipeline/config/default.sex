@@ -12,10 +12,10 @@ PARAMETERS_NAME        /home/andrew/sdi_pipeline/sdi_pipeline/config/default.par
 #------------------------------- Extraction ----------------------------------
  
 DETECT_TYPE      CCD            # CCD (linear) or PHOTO (with gamma correction)
-DETECT_MINAREA   3              # min. # of pixels above threshold
+DETECT_MINAREA   8              # min. # of pixels above threshold
 
-DETECT_THRESH    3            # <sigmas> or <threshold>,<ZP> in mag.arcsec-2
-ANALYSIS_THRESH  3            # <sigmas> or <threshold>,<ZP> in mag.arcsec-2
+DETECT_THRESH    4            # <sigmas> or <threshold>,<ZP> in mag.arcsec-2
+ANALYSIS_THRESH  4            # <sigmas> or <threshold>,<ZP> in mag.arcsec-2
  
 FILTER           Y              # apply filter for detection (Y or N)?
 FILTER_NAME        /home/andrew/sdi_pipeline/sdi_pipeline/config/default.conv
@@ -101,3 +101,8 @@ XML_NAME         sex.xml        # Filename for XML output
 XSL_URL          file:///usr/local/share/sextractor/sextractor.xsl
                                 # Filename for XSL style-sheet
 
+#----------------------------- PSF photometry ---------------------------------
+PSF_NAME        /home/andrew/sdi/targets/m31_s8/00:45:24.570_+41:14:40.85/air/10/psf/06:05:56.050_A_.psf
+PSF_NMAX         1              # Max.number of PSFs fitted simultaneously
+PATTERN_TYPE     GAUSS-LAGUERRE # can RINGS-QUADPOLE, RINGS-OCTOPOLE,
+                                # RINGS-HARMONICS or GAUSS-LAGUERRE

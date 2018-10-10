@@ -7,15 +7,17 @@ def GET():
     request_check = input("-> Get data from LCO or unpack downloaded data? (dl/unpack): ")
     if request_check == 'dl':
         data_request.request()
-        unpack_check = input("/n-> Unpack downloaded data? (y/n): ")
+        unpack_check = input("-> Unpack downloaded data? (y/n): ")
         if unpack_check == 'y':
             obtain.move(loc+'/sdi/temp')
             obtain.process()
             check = input("-> Move data into target directory? (y/n): ")
             if check == "y":
-                tar = input("-> Enter target: ")
-                obtain.movetar(tar)
-                obtain.rename(tar)
+                try:
+                    obtain.movetar()
+                except UnboundLocalError:
+                    print("-> No data in 'temp' to move")
+                obtain.rename()
             elif check != "y" and check != "n":
                 print("-> Error: unknown Input")
     elif request_check == 'unpack':
@@ -26,9 +28,11 @@ def GET():
         obtain.process()
         check = input("-> Move data into target directory? (y/n): ")
         if check == "y":
-            tar = input("-> Enter target: ")
-            obtain.movetar(tar)
-            obtain.rename(tar)
+            try:
+                obtain.movetar()
+            except UnboundLocalError:
+                print("-> No data in 'temp' to move")
+            obtain.rename()
         elif check != "y" and check != "n":
             print("-> Error: unknown Input")
 
@@ -36,15 +40,17 @@ if __name__ == '__main__':
     request_check = input("-> Get data from LCO or unpack downloaded data? (dl/unpack): ")
     if request_check == 'dl':
         data_request.request()
-        unpack_check = input("/n-> Unpack downloaded data? (y/n): ")
+        unpack_check = input("-> Unpack downloaded data? (y/n): ")
         if unpack_check == 'y':
             obtain.move(loc+'/sdi/temp')
             obtain.process()
             check = input("-> Move data into target directory? (y/n): ")
             if check == "y":
-                tar = input("-> Enter target: ")
-                obtain.movetar(tar)
-                obtain.rename(tar)
+                try:
+                    obtain.movetar()
+                except UnboundLocalError:
+                    print("-> No data in 'temp' to move")
+                obtain.rename()
             elif check != "y" and check != "n":
                 print("-> Error: unknown Input")
     elif request_check == 'unpack':
@@ -55,8 +61,10 @@ if __name__ == '__main__':
         obtain.process()
         check = input("-> Move data into target directory? (y/n): ")
         if check == "y":
-            tar = input("-> Enter target: ")
-            obtain.movetar(tar)
-            obtain.rename(tar)
+            try:
+                obtain.movetar()
+            except UnboundLocalError:
+                print("-> No data in 'temp' to move")
+            obtain.rename()
         elif check != "y" and check != "n":
             print("-> Error: unknown Input")
